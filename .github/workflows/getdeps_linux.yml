@@ -3,21 +3,37 @@
 name: linux
 
 on:
-  push:
-    branches:
-    - main
-  pull_request:
-    branches:
-    - main
+  # push:
+  #   branches:
+  #   - main
+  # pull_request:
+  #   branches:
+  #   - main
+  # schedule:
+  #   - cron:  '0 3 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: read  #  to fetch code (actions/checkout)
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    name: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-22.04
+          - ubicloud-standard-2
+          - ubicloud-standard-4
+          - ubicloud-standard-8
+          - ubicloud-standard-16
+          - ubicloud-standard-30
+    runs-on: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v4
+    - name: Show cpu info
+      run: lscpu
     - name: Show disk space at start
       run: df -h
     - name: Free up disk space
@@ -118,7 +134,8 @@ jobs:
       run: python3 build/fbcode_builder/getdeps.py --allow-system-packages build --src-dir=. folly  --project-install-prefix folly:/usr/local
     - name: Copy artifacts
       run: python3 build/fbcode_builder/getdeps.py --allow-system-packages fixup-dyn-deps --strip --src-dir=. folly _artifacts/linux  --project-install-prefix folly:/usr/local --final-install-prefix /usr/local
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
+      if: false
       with:
         name: folly
         path: _artifacts
