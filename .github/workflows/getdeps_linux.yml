@@ -9,15 +9,33 @@ on:
   pull_request:
     branches:
     - main
+  schedule:
+    - cron:  '0 3 * * 1'
 
 permissions:
   contents: read  #  to fetch code (actions/checkout)
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    name: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-latest
+          - ubicloud-standard-2
+          - ubicloud-standard-4
+          - ubicloud-standard-8
+          - ubicloud-standard-16
+          - ubicloud-standard-30
+          - ubicloud-standard-2-ubuntu-2404
+          - ubicloud-standard-4-ubuntu-2404
+          - ubicloud-standard-8-ubuntu-2404
+    runs-on: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v4
+    - name: Show cpu info
+      run: lscpu
     - name: Show disk space at start
       run: df -h
     - name: Free up disk space
