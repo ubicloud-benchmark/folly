@@ -3,9 +3,9 @@
 name: linux
 
 on:
-  # push:
-  #   branches:
-  #   - main
+  push:
+    branches:
+    - facebook/folly
   # pull_request:
   #   branches:
   #   - main
