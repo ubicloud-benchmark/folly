@@ -29,13 +29,7 @@ jobs:
         runner:
           - ubuntu-24.04
           - ubicloud-standard-2
-          - ubicloud-standard-4
-          - ubicloud-standard-8
-          - ubicloud-standard-16
           - ubicloud-premium-2
-          - ubicloud-premium-4
-          - ubicloud-premium-8
-          - ubicloud-premium-16
     runs-on: ${{ matrix.runner }}
     steps:
     - name: Show cpu info
